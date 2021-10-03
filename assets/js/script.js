@@ -36,8 +36,14 @@ var formSubmitHandler = function(event) {
     }
 };
 
-function getApiInfo(value) {
-    console.log(value);
+function getApiInfo(city) {
+    var weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=ccc3725be18b1f525c1c29bf9b604115";
+  $.getJSON( weatherAPI, {
+    format: "json"
+  })
+  .done(function( data ) {
+      console.log(data)
+  });
 };
 
 searchHistory.html("");

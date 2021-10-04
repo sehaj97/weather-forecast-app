@@ -53,7 +53,6 @@ function getApiInfo(city) {
         if(response.ok){
             response.json().then(data => {
                 displayCurrentWeather(data);
-                displayForecastWeather(city);
             })
         } else {
             $(".list-group-item").first().remove();
@@ -81,7 +80,7 @@ function displayCurrentWeather(data){
 }
 
 function getUVIndex(lon,lat) {
-    var allinOneAPI = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=hourly,daily,minutely&appid=ccc3725be18b1f525c1c29bf9b604115";
+    var allinOneAPI = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=hourly,minutely&appid=ccc3725be18b1f525c1c29bf9b604115";
     fetch(allinOneAPI)
 	.then(response => {
         if(response.ok){
@@ -97,6 +96,7 @@ function getUVIndex(lon,lat) {
                 } else {
                     currentUV.addClass("bg-info");
                 }
+                displayForecastWeather(data.daily);
             })
         } else {
             console.log("something went wrong please try again later")
@@ -104,18 +104,21 @@ function getUVIndex(lon,lat) {
     });
 };
 
-function displayForecastWeather(city) {
-    var forecastAPI = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=ccc3725be18b1f525c1c29bf9b604115";
-    fetch(forecastAPI)
-	.then(response => {
-        if(response.ok){
-            response.json().then(data => {
-                console.log(data)
-            })
-        } else {
-            console.log("something went wrong please try again later")
-        }
-    });
+function displayForecastWeather(data) {
+    $("#forecast-weather").html("");
+  for(i=0;i<5;i++){
+    var col = $("<div>").addClass("col my-3 day-"+[i]);
+    var card = $("<div>").addClass("card bg-secondary text-white");
+    var cardHeader = $("<h3>").addClass("card-header");
+    var cardBody = $("<div>").addClass("card-body");
+    var weatherIconStatus = $("<img>").attr("src", "https://openweathermap.org/img/wn/"+data[i].weather[0].icon+".png");
+    $("#forecast-weather").append(col);
+    $(".day-"+i).append(card);
+    $(".day-"+i+" .card").append(cardHeader);
+    $(".day-"+i+" .card-header").text(moment().add(i+1, 'days').format("M/DD/YYYY"));
+    $(".day-"+i+" .card").append(cardBody);
+    $(".day-"+i+" .card-body").append(weatherIconStatus);
+  }  
 };
 searchHistory.html("");
 searchHistory.append(searchList);

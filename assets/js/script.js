@@ -105,19 +105,28 @@ function getUVIndex(lon,lat) {
 };
 
 function displayForecastWeather(data) {
-    $("#forecast-weather").html("");
+$("#forecast-weather").html("");
   for(i=0;i<5;i++){
     var col = $("<div>").addClass("col my-3 day-"+[i]);
     var card = $("<div>").addClass("card bg-secondary text-white");
     var cardHeader = $("<h3>").addClass("card-header");
     var cardBody = $("<div>").addClass("card-body");
     var weatherIconStatus = $("<img>").attr("src", "https://openweathermap.org/img/wn/"+data[i].weather[0].icon+".png");
+    var infoContainer = $("<ul>").addClass("list-group list-group-flush");
+    var itemTemp = $("<li>").addClass("list-group-item temp bg-secondary text-white").text("Temp: "+ Math.round((data[i].temp.day - 273.15) * (9/5) + 32)+ "\u{00B0} F");
+    var itemWind = $("<li>").addClass("list-group-item wind bg-secondary text-white").text("Wind Speed: "+ Math.round(data[i].wind_speed * 2.237)+ " MPH");
+    var itemHumidity = $("<li>").addClass("list-group-item humid bg-secondary text-white").text("Humidity: "+data[i].humidity + "%");
     $("#forecast-weather").append(col);
     $(".day-"+i).append(card);
     $(".day-"+i+" .card").append(cardHeader);
     $(".day-"+i+" .card-header").text(moment().add(i+1, 'days').format("M/DD/YYYY"));
     $(".day-"+i+" .card").append(cardBody);
     $(".day-"+i+" .card-body").append(weatherIconStatus);
+    $(".day-"+i+" .card-body").append(infoContainer);
+    $(".day-"+i+" ul").append(itemTemp);
+    $(".day-"+i+" ul").append(itemWind);
+    $(".day-"+i+" ul").append(itemHumidity);
+
   }  
 };
 searchHistory.html("");
